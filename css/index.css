@@ -2013,7 +2013,7 @@ blockquote footer cite:before {
 }
 @media screen and (min-width: 900px) {
   #aside_content .card-widget {
-    margin-left: 15px;
+    margin-right: 15px;
   }
 }
 .category-content ol,
@@ -3185,6 +3185,22 @@ blockquote footer cite:before {
   }
   #recent-posts .recent-post-item .recent-post-info .content {
     height: auto;
+  }
+}
+@media screen and (min-width: 900px) {
+  #recent-posts,
+  #page,
+  .category-content,
+  #archive,
+  .tag-cloud,
+  #tag,
+  #category {
+    -webkit-box-ordinal-group: 2;
+    -moz-box-ordinal-group: 2;
+    -o-box-ordinal-group: 2;
+    -ms-flex-order: 2;
+    -webkit-order: 2;
+    order: 2;
   }
 }
 @media screen and (max-width: 900px) {
@@ -4656,6 +4672,33 @@ figure.gallery-group .gallery-group-name:after {
 }
 [data-theme='dark'] .mermaid {
   filter: brightness(0.7);
+}
+[data-theme='dark'] #gitalk-container .gt-header-textarea,
+[data-theme='dark'] #gitalk-container .gt-header-preview,
+[data-theme='dark'] #gitalk-container .gt-comment-content,
+[data-theme='dark'] #gitalk-container button,
+[data-theme='dark'] #gitalk-container .gt-popup {
+  filter: brightness(0.7);
+}
+[data-theme='dark'] #gitalk-container svg {
+  fill: rgba(255,255,255,0.6) !important;
+}
+[data-theme='dark'] #disqus_thread #dsqjs .dsqjs-tab-active,
+[data-theme='dark'] #disqus_thread #dsqjs .dsqjs-no-comment {
+  color: rgba(255,255,255,0.6);
+}
+[data-theme='dark'] #disqus_thread #dsqjs .dsqjs-order-label {
+  background-color: #1f1f1f;
+}
+[data-theme='dark'] #disqus_thread #dsqjs .dsqjs-post-body {
+  color: rgba(255,255,255,0.6);
+}
+[data-theme='dark'] #disqus_thread #dsqjs .dsqjs-post-body code,
+[data-theme='dark'] #disqus_thread #dsqjs .dsqjs-post-body pre {
+  background: #2c2c2c;
+}
+[data-theme='dark'] #disqus_thread #dsqjs .dsqjs-post-body blockquote {
+  color: rgba(255,255,255,0.6);
 }
 [data-theme='light'] .read-mode {
   background: #fff;
