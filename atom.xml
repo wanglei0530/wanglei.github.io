@@ -187,9 +187,9 @@
     
       <category term="SpringBoot" scheme="http://yoursite.com/tags/SpringBoot/"/>
     
-      <category term="Mysql" scheme="http://yoursite.com/tags/Mysql/"/>
-    
       <category term="学习" scheme="http://yoursite.com/tags/%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="Mysql" scheme="http://yoursite.com/tags/Mysql/"/>
     
   </entry>
   
@@ -289,9 +289,9 @@
     
       <category term="SpringBoot" scheme="http://yoursite.com/tags/SpringBoot/"/>
     
-      <category term="学习" scheme="http://yoursite.com/tags/%E5%AD%A6%E4%B9%A0/"/>
-    
       <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+      <category term="学习" scheme="http://yoursite.com/tags/%E5%AD%A6%E4%B9%A0/"/>
     
   </entry>
   
