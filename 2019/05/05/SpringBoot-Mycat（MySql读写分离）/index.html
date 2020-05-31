@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>SpringBoot-Mycat（MySql读写分离） | 王蕾的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="[TOC]   Mysql配置  1、环境信息123操作系统:centos7.0#mysql版本 mysql-community-client-5.7.25-1.el6.x86_64.rpm#节点 192.168.4.182(主)、192.168.4.183(从)  2、主数据库配置(my.cnf)1234567vim &#x2F;etc&#x2F;my.cnf#日志文件名称log-bin&#x3D;master-a-bin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot-Mycat（MySql读写分离）">
+<meta property="og:url" content="http://yoursite.com/2019/05/05/SpringBoot-Mycat%EF%BC%88MySql%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%89/index.html">
+<meta property="og:site_name" content="王蕾的博客">
+<meta property="og:description" content="[TOC]   Mysql配置  1、环境信息123操作系统:centos7.0#mysql版本 mysql-community-client-5.7.25-1.el6.x86_64.rpm#节点 192.168.4.182(主)、192.168.4.183(从)  2、主数据库配置(my.cnf)1234567vim &#x2F;etc&#x2F;my.cnf#日志文件名称log-bin&#x3D;master-a-bin">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-05-05T04:07:14.000Z">
+<meta property="article:modified_time" content="2020-05-30T16:04:30.179Z">
+<meta property="article:author" content="Wanglei">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="王蕾的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">王蕾的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-SpringBoot-Mycat（MySql读写分离）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/05/05/SpringBoot-Mycat%EF%BC%88MySql%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%89/" class="article-date">
+  <time datetime="2019-05-05T04:07:14.000Z" itemprop="datePublished">2019-05-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SpringBoot-Mycat（MySql读写分离）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>[TOC]</p>
+<ul>
+<li><input disabled="" type="checkbox"> <h2 id="Mysql配置"><a href="#Mysql配置" class="headerlink" title="Mysql配置"></a>Mysql配置</h2></li>
+</ul>
+<h3 id="1、环境信息"><a href="#1、环境信息" class="headerlink" title="1、环境信息"></a>1、环境信息</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">操作系统:centos7.0</span><br><span class="line">#mysql版本 mysql-community-client-5.7.25-1.el6.x86_64.rpm</span><br><span class="line">#节点 192.168.4.182(主)、192.168.4.183(从)</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、主数据库配置-my-cnf"><a href="#2、主数据库配置-my-cnf" class="headerlink" title="2、主数据库配置(my.cnf)"></a>2、主数据库配置(my.cnf)</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">vim</span> /<span class="selector-tag">etc</span>/<span class="selector-tag">my</span><span class="selector-class">.cnf</span></span><br><span class="line">#日志文件名称</span><br><span class="line">log-bin=master-a-bin #二进制日志的格式，有row、statement和mixed三种类型 </span><br><span class="line">binlog-format=ROW #要求各个服务器的这个id必须不一样</span><br><span class="line">server-id=1</span><br><span class="line">#同步的数据库名称</span><br><span class="line">binlog-do-db=yidiankt</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、mysql执行-账号授权-让从库可以连接到"><a href="#3、mysql执行-账号授权-让从库可以连接到" class="headerlink" title="3、mysql执行,账号授权(让从库可以连接到)"></a>3、mysql执行,账号授权(让从库可以连接到)</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> grant replication slave on *.* to <span class="string">'root'</span>@<span class="string">'192.168.4.199'</span> identified by <span class="string">'123456'</span>;</span></span><br><span class="line">flush privileges;</span><br><span class="line"><span class="meta">#</span><span class="bash">ERROR 1819 (HY000): Your password does not satisfy the current policy requirements(解决办法)</span></span><br><span class="line">set global validate_password_length=6; </span><br><span class="line">set global validate_password_policy=LOW;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、从数据库配置-my-cnf"><a href="#4、从数据库配置-my-cnf" class="headerlink" title="4、从数据库配置(my.cnf)"></a>4、从数据库配置(my.cnf)</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">日志文件名称</span></span><br><span class="line">log-bin=master-a-bin</span><br><span class="line"><span class="meta">#</span><span class="bash">二进制日志的格式，跟主服务器一样</span></span><br><span class="line">binlog-format=ROW</span><br><span class="line"><span class="meta">#</span><span class="bash">要求各个服务器的这个id必须不一样</span></span><br><span class="line">server-id=2 #中继日志执行之后，这些变化是否需要计入自己的binarylog。当你的从服务器需要作为另外一个服务器的主服务器 的时候需要打开。就是双主互相备份，或者多主循环备份。</span><br><span class="line">log-slave-updates=true</span><br></pre></td></tr></table></figure>
+
+<h3 id="5、主数据库重启"><a href="#5、主数据库重启" class="headerlink" title="5、主数据库重启"></a>5、主数据库重启</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">service mysqld restart</span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show master status;</span></span><br><span class="line">+---------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| File                | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |</span><br><span class="line">+---------------------+----------+--------------+------------------+-------------------+</span><br><span class="line">| master-a-bin.000002 |      154 |  slave_test  |                  |                   |</span><br><span class="line">+---------------------+----------+--------------+------------------+-------------------+</span><br></pre></td></tr></table></figure>
+
+<h3 id="6、切换到从库"><a href="#6、切换到从库" class="headerlink" title="6、切换到从库"></a>6、切换到从库</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">service mysqld restart</span><br><span class="line"><span class="meta">#</span><span class="bash">设置主从同步日志(在从库中执行！)</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> change master to </span></span><br><span class="line">master_host='192.168.4.189',</span><br><span class="line">master_user='root',</span><br><span class="line">master_password='123456',</span><br><span class="line">master_port=3306,</span><br><span class="line">master_log_file='master-a-bin.000010',</span><br><span class="line">master_log_pos=1449;</span><br><span class="line"><span class="meta">#</span><span class="bash">开启从数据库</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> start slave;</span></span><br><span class="line"><span class="meta">#</span><span class="bash">查看状态(Slave_IO_Running,Slave_IO_Running都是yes才没问题，所以现在是有问题的！)</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show slave status \G;</span></span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">               Slave_IO_State: </span><br><span class="line">                  Master_Host: 192.168.4.199</span><br><span class="line">                  Master_User: root</span><br><span class="line">                  Master_Port: 3306</span><br><span class="line">                Connect_Retry: 60</span><br><span class="line">              Master_Log_File: master-a-bin.000002</span><br><span class="line">          Read_Master_Log_Pos: 154</span><br><span class="line">               Relay_Log_File: localhost-relay-bin.000001</span><br><span class="line">                Relay_Log_Pos: 4</span><br><span class="line">        Relay_Master_Log_File: master-a-bin.000002</span><br><span class="line">             Slave_IO_Running: No</span><br><span class="line">            Slave_IO_Running: No</span><br><span class="line"><span class="meta">#</span><span class="bash">添加从库连接权限</span></span><br><span class="line">grant all privileges on *.* to 'root'@'%' identified by '123456' with grant option;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7、-测试主从同步！"><a href="#7、-测试主从同步！" class="headerlink" title="7、 测试主从同步！"></a>7、 测试主从同步！</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE &#96;user&#96; (</span><br><span class="line">  &#96;id&#96; int(11) NOT NULL,</span><br><span class="line">  &#96;name&#96; varchar(255) DEFAULT NULL,</span><br><span class="line">  PRIMARY KEY (&#96;id&#96;)</span><br><span class="line">) ENGINE&#x3D;InnoDB;</span><br><span class="line">insert user values(id,name),(1,&quot;a&quot;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><input disabled="" type="checkbox"> <h2 id="MyCat配置"><a href="#MyCat配置" class="headerlink" title="MyCat配置"></a>MyCat配置</h2></li>
+</ul>
+<h3 id="1、下载、安装、环境变量mycat"><a href="#1、下载、安装、环境变量mycat" class="headerlink" title="1、下载、安装、环境变量mycat"></a>1、下载、安装、环境变量mycat</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wget http://dl.mycat.io/1.6-RELEASE/Mycat-server-1.6-RELEASE-20161028204710-linux.tar.gz</span><br><span class="line">tar -zvxf Mycat-server-1.5.1-RELEASE-20160602230303-linux.tar.gz </span><br><span class="line"><span class="meta">#</span><span class="bash">配置环境变量(非必须)</span></span><br><span class="line">vi /etc/profile</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="built_in">export</span> MYCAT_HOME=/usr/<span class="built_in">local</span>/mycat</span></span><br><span class="line">source /etc/profile</span><br><span class="line"><span class="meta">#</span><span class="bash">测试是否生效：</span></span><br><span class="line">echo $MYCAT_HOME</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、配置mycat-server-xml"><a href="#2、配置mycat-server-xml" class="headerlink" title="2、配置mycat(server.xml)"></a>2、配置mycat(server.xml)</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">vim mycat/conf/server.xml </span><br><span class="line">&lt;!--system中添加UTF-8字符集设置，否则存储中文会出现问号 --&gt;</span><br><span class="line">&lt;property name="charset"&gt;utf8&lt;/property&gt;</span><br><span class="line">&lt;user name="root"&gt;</span><br><span class="line">    &lt;property name="password"&gt;123456&lt;/property&gt;</span><br><span class="line">    &lt;property name="schemas"&gt;TESTDB&lt;/property&gt;</span><br><span class="line">&lt;/user&gt;</span><br><span class="line">&lt;user name="user"&gt;</span><br><span class="line">    &lt;property name="password"&gt;123456&lt;/property&gt;</span><br><span class="line">    &lt;property name="schemas"&gt;mycat&lt;/property&gt;</span><br><span class="line">    &lt;property name="readOnly"&gt;true&lt;/property&gt;</span><br><span class="line">&lt;/user&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、配置mycat-schema-xml"><a href="#3、配置mycat-schema-xml" class="headerlink" title="3、配置mycat(schema.xml)"></a>3、配置mycat(schema.xml)</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">vim mycat/conf/schema.xml</span><br><span class="line"><span class="comment">&lt;!-- 配置节点 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dataNode</span> <span class="attr">name</span>=<span class="string">"mycat_test"</span> <span class="attr">dataHost</span>=<span class="string">"localhost1"</span> <span class="attr">database</span>=<span class="string">"slave_test"</span> /&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- balance参数说明: 0-不使用读写分离 1-使用读写分离 2-随机分配 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dataHost</span> <span class="attr">name</span>=<span class="string">"localhost1"</span> <span class="attr">maxCon</span>=<span class="string">"1000"</span> <span class="attr">minCon</span>=<span class="string">"10"</span> <span class="attr">balance</span>=<span class="string">"1"</span> <span class="attr">writeType</span>=<span class="string">"0"</span> <span class="attr">dbType</span>=<span class="string">"mysql"</span> <span class="attr">dbDriver</span>=<span class="string">"native"</span> <span class="attr">switchType</span>=<span class="string">"1"</span>  <span class="attr">slaveThreshold</span>=<span class="string">"100"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">heartbeat</span>&gt;</span>select user()<span class="tag">&lt;/<span class="name">heartbeat</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置主节点(可以配置多个节点)--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">writeHost</span> <span class="attr">host</span>=<span class="string">"hostM1"</span> <span class="attr">url</span>=<span class="string">"192.168.4.199:3306"</span> <span class="attr">user</span>=<span class="string">"root"</span> <span class="attr">password</span>=<span class="string">"123456"</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 配合从节点(可以配置多个节点) --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">readHost</span> <span class="attr">host</span>=<span class="string">"hostS2"</span> <span class="attr">url</span>=<span class="string">"192.168.4.190:3306"</span> <span class="attr">user</span>=<span class="string">"root"</span> <span class="attr">password</span>=<span class="string">"123456"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">writeHost</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dataHost</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 添加 dataNode="mycat_test" 否则不生效--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">schema</span> <span class="attr">name</span>=<span class="string">"TESTDB"</span> <span class="attr">checkSQLschema</span>=<span class="string">"false"</span> <span class="attr">sqlMaxLimit</span>=<span class="string">"100"</span> <span class="attr">dataNode</span>=<span class="string">"mycat_test"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4、启动测试"><a href="#4、启动测试" class="headerlink" title="4、启动测试"></a>4、启动测试</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">./mycat/bin/mycat start</span><br><span class="line"><span class="meta">#</span><span class="bash">查看是否启动</span></span><br><span class="line">ps -ef | grep mycat</span><br><span class="line"><span class="meta">#</span><span class="bash">登录mycat管理端口(一定要是管理端口！否则mycat命令无法使用)</span></span><br><span class="line">mysql -uroot -p123456 -P9066 -h127.0.0.1</span><br><span class="line"><span class="meta">#</span><span class="bash">-------------------mycat常用命令-------------------</span></span><br><span class="line"><span class="meta">#</span><span class="bash">查看数据源的状态</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show @@datasource;</span></span><br><span class="line"><span class="meta">#</span><span class="bash">查看心跳状态</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show @@heartbeat;</span></span><br><span class="line"><span class="meta">#</span><span class="bash">用于更新 schema.xml 配置文件,免得重启服务</span></span><br><span class="line">reload @@config;</span><br><span class="line"><span class="meta">#</span><span class="bash">-----------------------------------------------</span></span><br><span class="line"><span class="meta">#</span><span class="bash">修改日志级别</span></span><br><span class="line">vim mycat/conf/log4j2.xml </span><br><span class="line">&lt;asyncRoot level="info" includeLocation="true"&gt; 修改为“debug”查看实时日志</span><br><span class="line"><span class="meta">#</span><span class="bash">查看实时日志</span></span><br><span class="line">tail -f mycat/logs/wrapper.log</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/05/05/SpringBoot-Mycat%EF%BC%88MySql%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%89/" data-id="ckatuothj0005yk011qbp335s" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/05/14/Docker-%E5%85%A5%E9%97%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Docker-入门
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/05/05/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%A6%85%E9%81%93Linux/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">项目管理禅道Linux</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/06/12/Centos7%20%E7%B3%BB%E7%BB%9F%E5%BF%AB%E9%80%9F%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91%E6%90%AD%E5%BB%BA/">Centos7 系统快速环境开发搭建</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/14/Docker-%E5%85%A5%E9%97%A8/">Docker-入门</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/05/SpringBoot-Mycat%EF%BC%88MySql%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%89/">SpringBoot-Mycat（MySql读写分离）</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/05/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%A6%85%E9%81%93Linux/">项目管理禅道Linux</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/04/MySql%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90(%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3%E5%AE%8C%E6%88%90%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%87%E5%BA%93,%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB)/">MySql多数据源(自定义注解完成数据库切库,读写分离)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Wanglei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

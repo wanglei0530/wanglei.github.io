@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>MySql多数据源(自定义注解完成数据库切库,读写分离) | 王蕾的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文参照：前提 ​        这几天，学员们反馈希望学习一下自定义注解，正好准备高并发课程内容里有一块涉及到使用自定义注解完成数据库切库的内容。这里单独写一篇文章记录说明一下。 为什么会有数据库切库一说 首先，许多项目都有主库与从库，有的主库后面甚至会有很多个从库，主从库之间的通常同步也很快，这为数据库切库提供了一个基础，因为可以去不同的数据库查询，得到相同的结果（如果不同的数据库是完全不同的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySql多数据源(自定义注解完成数据库切库,读写分离)">
+<meta property="og:url" content="http://yoursite.com/2019/01/04/MySql%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90(%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3%E5%AE%8C%E6%88%90%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%87%E5%BA%93,%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB)/index.html">
+<meta property="og:site_name" content="王蕾的博客">
+<meta property="og:description" content="本文参照：前提 ​        这几天，学员们反馈希望学习一下自定义注解，正好准备高并发课程内容里有一块涉及到使用自定义注解完成数据库切库的内容。这里单独写一篇文章记录说明一下。 为什么会有数据库切库一说 首先，许多项目都有主库与从库，有的主库后面甚至会有很多个从库，主从库之间的通常同步也很快，这为数据库切库提供了一个基础，因为可以去不同的数据库查询，得到相同的结果（如果不同的数据库是完全不同的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-01-04T09:59:44.000Z">
+<meta property="article:modified_time" content="2020-05-30T15:48:51.757Z">
+<meta property="article:author" content="Wanglei">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="王蕾的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">王蕾的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MySql多数据源(自定义注解完成数据库切库,读写分离)" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/04/MySql%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90(%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3%E5%AE%8C%E6%88%90%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%87%E5%BA%93,%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB)/" class="article-date">
+  <time datetime="2019-01-04T09:59:44.000Z" itemprop="datePublished">2019-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MySql多数据源(自定义注解完成数据库切库,读写分离)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="本文参照："><a href="#本文参照：" class="headerlink" title="本文参照："></a>本文参照：</h3><p>前提</p>
+<p>​        这几天，学员们反馈希望学习一下自定义注解，正好准备高并发课程内容里有一块涉及到使用自定义注解完成数据库切库的内容。这里单独写一篇文章记录说明一下。</p>
+<p>为什么会有数据库切库一说</p>
+<p>首先，许多项目都有主库与从库，有的主库后面甚至会有很多个从库，主从库之间的通常同步也很快，这为数据库切库提供了一个基础，因为可以去不同的数据库查询，得到相同的结果（如果不同的数据库是完全不同的，这个不在我们这篇文章讨论的范围之内，那个属于让项目支持多个数据源）</p>
+<p>其次，随着项目越来越大、操作的用户越来越多，对数据库的请求操作越来越多，很容易想到的是将读写请求分开，将写请求交给主库处理，读请求直接从某个从库读取。这样可以极大的减少大量对主库的请求，提升主库的性能。</p>
+<p>接下来具体说一下如何通过自定义注解完成切库（代码使用springboot实现）：</p>
+<h3 id="第一步、定义我们自己的切库注解类"><a href="#第一步、定义我们自己的切库注解类" class="headerlink" title="第一步、定义我们自己的切库注解类"></a>第一步、定义我们自己的切库注解类</h3><p>自定义注解有几点需要注意：</p>
+<p>@Target 是作用的目标，接口、方法、类、字段、包等等，具体看：ElementType</p>
+<p>2）@Retention 是注解存在的范围，RUNTIME代表的是注解会在class字节码文件中存在，在运行时可以通过反射获取到，具体看：RetentionPolicy</p>
+<p>3）允许的变量，通常都要给定默认值，比如我们使用一个service时，可以@Service，也可以@Service(“xxxx”)</p>
+<p>@Retention(RetentionPolicy.RUNTIME) @Target({ElementType.METHOD,ElementType.TYPE}) public @interface RoutingDataSource {     String value() default DataSources.MASTER_DB; }</p>
+<h3 id="第二步、定义需要使用的数据库及配置"><a href="#第二步、定义需要使用的数据库及配置" class="headerlink" title="第二步、定义需要使用的数据库及配置"></a>第二步、定义需要使用的数据库及配置</h3><h4 id="1、数据库配置：application-properties，这里要注意不同db的前缀区别"><a href="#1、数据库配置：application-properties，这里要注意不同db的前缀区别" class="headerlink" title="1、数据库配置：application.properties，这里要注意不同db的前缀区别"></a>1、数据库配置：application.properties，这里要注意不同db的前缀区别</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">datasource:</span></span><br><span class="line">  <span class="attr">druid:</span></span><br><span class="line">    <span class="attr">db-master:</span></span><br><span class="line">      <span class="attr">username:</span> <span class="string">XXXXXX</span></span><br><span class="line">      <span class="attr">password:</span> <span class="string">XXXXXX!@#</span></span><br><span class="line">      <span class="attr">url:</span> <span class="string">jdbc:mysql://XXXXXX/dev</span></span><br><span class="line">      <span class="attr">db-type:</span> <span class="string">com.alibaba.druid.pool.DruidDataSource</span></span><br><span class="line">      <span class="attr">driver-class-name:</span>  <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line">    <span class="attr">db-slave:</span></span><br><span class="line">      <span class="attr">username:</span> <span class="string">XXXXXX</span></span><br><span class="line">      <span class="attr">password:</span> <span class="string">XXXXXX!@#</span></span><br><span class="line">      <span class="attr">url:</span> <span class="string">jdbc:mysql://XXXXXX:10092/dev</span></span><br><span class="line">      <span class="attr">db-type:</span> <span class="string">com.alibaba.druid.pool.DruidDataSource</span></span><br><span class="line">      <span class="attr">driver-class-name:</span>  <span class="string">com.mysql.cj.jdbc.Driver</span></span><br></pre></td></tr></table></figure>
+<h4 id="2、定义支持的数据源id："><a href="#2、定义支持的数据源id：" class="headerlink" title="2、定义支持的数据源id："></a>2、定义支持的数据源id：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DataSources</span> </span>&#123;</span><br><span class="line">    String MASTER_DB = <span class="string">"db-maste"</span>;</span><br><span class="line">    String SLAVE_DB = <span class="string">"db-slave"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3、多数据源配置代码"><a href="#3、多数据源配置代码" class="headerlink" title="3、多数据源配置代码"></a>3、多数据源配置代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;</span><br><span class="line"><span class="keyword">import</span> org.springframework.boot.context.properties.ConfigurationProperties;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Bean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.annotation.Primary;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.sql.DataSource;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicDataSourceConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@ConfigurationProperties</span>(<span class="string">"spring.datasource.druid.wl-master"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource  <span class="title">xiaobinMasterDataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> DruidDataSourceBuilder.create().build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@ConfigurationProperties</span>(<span class="string">"spring.datasource.druid.wl-slave"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource  <span class="title">xiaobinSlaveDataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> DruidDataSourceBuilder.create().build();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@Primary</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DynamicDataSource <span class="title">dataSource</span><span class="params">(DataSource xiaobinMasterDataSource, DataSource xiaobinSlaveDataSource)</span> </span>&#123;</span><br><span class="line">        Map&lt;Object, Object&gt; targetDataSources = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        targetDataSources.put(<span class="string">"wl-master"</span>,xiaobinMasterDataSource);</span><br><span class="line">        targetDataSources.put(<span class="string">"wl-slave"</span>, xiaobinSlaveDataSource);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DynamicDataSource(xiaobinMasterDataSource, targetDataSources);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="4、配置成动态数据源："><a href="#4、配置成动态数据源：" class="headerlink" title="4、配置成动态数据源："></a>4、配置成动态数据源：</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;</span><br><span class="line"><span class="keyword">import</span> org.springframework.lang.Nullable;</span><br><span class="line"><span class="keyword">import</span> javax.sql.DataSource;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DynamicDataSource</span> <span class="keyword">extends</span> <span class="title">AbstractRoutingDataSource</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;String&gt; contextHolder = <span class="keyword">new</span> ThreadLocal&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DynamicDataSource</span><span class="params">(DataSource defaultTargetDataSource, Map&lt;Object, Object&gt; targetDataSources)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.setDefaultTargetDataSource(defaultTargetDataSource);</span><br><span class="line">        <span class="keyword">super</span>.setTargetDataSources(targetDataSources);</span><br><span class="line">        <span class="keyword">super</span>.afterPropertiesSet();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">determineCurrentLookupKey</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> getDataSource();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDataSource</span><span class="params">(String dataSource)</span> </span>&#123;</span><br><span class="line">        contextHolder.set(dataSource);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getDataSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> contextHolder.get();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">clearDataSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        contextHolder.remove();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="5、AOP切面类配置"><a href="#5、AOP切面类配置" class="headerlink" title="5、AOP切面类配置"></a>5、AOP切面类配置</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataSourceAspect</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Pointcut</span>(<span class="string">"@annotation(com.xiaobin.annotation.DataSource)"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dataSourcePointCut</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Around</span>(<span class="string">"dataSourcePointCut()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">around</span><span class="params">(ProceedingJoinPoint point)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        MethodSignature signature = (MethodSignature) point.getSignature();</span><br><span class="line">        Method method = signature.getMethod();</span><br><span class="line"></span><br><span class="line">        DataSource dataSource = method.getAnnotation(DataSource<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">        <span class="keyword">if</span>(dataSource == <span class="keyword">null</span>)&#123;</span><br><span class="line">            DynamicDataSource.setDataSource(<span class="string">"wl-master"</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            DynamicDataSource.setDataSource(dataSource.name());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> point.proceed();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            DynamicDataSource.clearDataSource();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="6、启动类配置，不然报错！"><a href="#6、启动类配置，不然报错！" class="headerlink" title="6、启动类配置，不然报错！"></a>6、启动类配置，不然报错！</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span>(exclude= &#123;DataSourceAutoConfiguration<span class="class">.<span class="keyword">class</span>&#125;)</span></span><br><span class="line"><span class="class">@<span class="title">MapperScan</span>(<span class="title">basePackages</span> </span>= <span class="string">"com.wl.mapper"</span>)</span><br><span class="line"><span class="meta">@Import</span>(&#123;DynamicDataSourceConfig<span class="class">.<span class="keyword">class</span>&#125;)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">class</span> <span class="title">StartApp</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(StartApp<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/01/04/MySql%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90(%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3%E5%AE%8C%E6%88%90%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%87%E5%BA%93,%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB)/" data-id="ckatuothg0004yk0194au0oxj" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/05/05/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%A6%85%E9%81%93Linux/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          项目管理禅道Linux
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/04/SpringBoot-%E6%95%B4%E5%90%88Mybatis/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">SpringBoot-整合Mybatis</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/06/12/Centos7%20%E7%B3%BB%E7%BB%9F%E5%BF%AB%E9%80%9F%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91%E6%90%AD%E5%BB%BA/">Centos7 系统快速环境开发搭建</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/14/Docker-%E5%85%A5%E9%97%A8/">Docker-入门</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/05/SpringBoot-Mycat%EF%BC%88MySql%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%89/">SpringBoot-Mycat（MySql读写分离）</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/05/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%A6%85%E9%81%93Linux/">项目管理禅道Linux</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/04/MySql%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90(%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3%E5%AE%8C%E6%88%90%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%87%E5%BA%93,%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB)/">MySql多数据源(自定义注解完成数据库切库,读写分离)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Wanglei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

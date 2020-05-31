@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Centos7 系统快速环境开发搭建 | 王蕾的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="系统安装略过，很简单！需要注意的是：确定需要安装 精简版(纯命令)和桌面版！阿里巴巴镜像库：https:&#x2F;&#x2F;opsx.alibaba.com 网络配置123456#进入配置目录vi &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-ens33#修改noboot为“yes”:wq#重启网络service network restart  安装基础命令(已装忽略)1234567">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Centos7 系统快速环境开发搭建">
+<meta property="og:url" content="http://yoursite.com/2019/06/12/Centos7%20%E7%B3%BB%E7%BB%9F%E5%BF%AB%E9%80%9F%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="王蕾的博客">
+<meta property="og:description" content="系统安装略过，很简单！需要注意的是：确定需要安装 精简版(纯命令)和桌面版！阿里巴巴镜像库：https:&#x2F;&#x2F;opsx.alibaba.com 网络配置123456#进入配置目录vi &#x2F;etc&#x2F;sysconfig&#x2F;network-scripts&#x2F;ifcfg-ens33#修改noboot为“yes”:wq#重启网络service network restart  安装基础命令(已装忽略)1234567">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-06-11T17:16:34.000Z">
+<meta property="article:modified_time" content="2020-05-30T16:28:42.117Z">
+<meta property="article:author" content="Wanglei">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="王蕾的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">王蕾的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Centos7 系统快速环境开发搭建" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/06/12/Centos7%20%E7%B3%BB%E7%BB%9F%E5%BF%AB%E9%80%9F%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91%E6%90%AD%E5%BB%BA/" class="article-date">
+  <time datetime="2019-06-11T17:16:34.000Z" itemprop="datePublished">2019-06-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Centos7 系统快速环境开发搭建
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>系统安装略过，很简单！<br>需要注意的是：确定需要安装 精简版(纯命令)和桌面版！<br>阿里巴巴镜像库：<a href="https://opsx.alibaba.com" target="_blank" rel="noopener">https://opsx.alibaba.com</a></p>
+<h3 id="网络配置"><a href="#网络配置" class="headerlink" title="网络配置"></a>网络配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">进入配置目录</span></span><br><span class="line">vi /etc/sysconfig/network-scripts/ifcfg-ens33</span><br><span class="line"><span class="meta">#</span><span class="bash">修改noboot为“yes”</span></span><br><span class="line">:wq</span><br><span class="line"><span class="meta">#</span><span class="bash">重启网络</span></span><br><span class="line">service network restart</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装基础命令-已装忽略"><a href="#安装基础命令-已装忽略" class="headerlink" title="安装基础命令(已装忽略)"></a>安装基础命令(已装忽略)</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">安装ipconfig命令 如果已安装请忽略</span></span><br><span class="line">yum install net-tools -y</span><br><span class="line"><span class="meta">#</span><span class="bash">安装wget命令</span></span><br><span class="line">yum install wget -y</span><br><span class="line"><span class="meta">#</span><span class="bash">brew mac软件源下载卡住问题</span></span><br><span class="line">vim ~/.bash_profile</span><br><span class="line"><span class="meta">#</span><span class="bash">新增一行</span></span><br><span class="line">export HOMEBREW_NO_AUTO_UPDATE=true</span><br></pre></td></tr></table></figure>
+
+<h3 id="远程ssh配置"><a href="#远程ssh配置" class="headerlink" title="远程ssh配置"></a>远程ssh配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">安装ssh服务</span></span><br><span class="line">yum -y install openssh</span><br><span class="line"><span class="meta">#</span><span class="bash">修改ssh配置</span></span><br><span class="line">vim /etc/ssh/sshd_config</span><br><span class="line"><span class="meta">#</span><span class="bash">PermitRootLogin yes</span></span><br><span class="line"><span class="meta">#</span><span class="bash">RSAAuthentication yes </span></span><br><span class="line"><span class="meta">#</span><span class="bash">PubkeyAuthentication yes</span></span><br><span class="line">ssh root@192.168.4.199</span><br></pre></td></tr></table></figure>
+
+<h3 id="firewalld防火墙配置"><a href="#firewalld防火墙配置" class="headerlink" title="firewalld防火墙配置"></a>firewalld防火墙配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">下载安装</span></span><br><span class="line">yum install -y firewalld</span><br><span class="line">yum install -y firewall-config </span><br><span class="line"><span class="meta">#</span><span class="bash">查看firewall的状态</span></span><br><span class="line">firewall-cmd --state</span><br><span class="line"><span class="meta">#</span><span class="bash">启动</span></span><br><span class="line">systemctl start firewalld</span><br><span class="line"><span class="meta">#</span><span class="bash">关闭</span></span><br><span class="line">systemctl stop firewalld </span><br><span class="line"><span class="meta">#</span><span class="bash">查看firewalld当前状态</span></span><br><span class="line">systemctl status firewalld </span><br><span class="line"><span class="meta">#</span><span class="bash">开机启动</span></span><br><span class="line">systemctl enable firewalld </span><br><span class="line"><span class="meta">#</span><span class="bash">取消开机启动</span></span><br><span class="line">systemctl disable firewalld </span><br><span class="line"><span class="meta">#</span><span class="bash">查看开放端口命令</span></span><br><span class="line">firewall-cmd --list-ports</span><br><span class="line"><span class="meta">#</span><span class="bash">添加开放端口</span></span><br><span class="line">firewall-cmd --permanent --zone=public --add-port=3306/tcp</span><br><span class="line">firewall-cmd --zone=public --add-port=5000/tcp --permanent  #对外网全部开放</span><br><span class="line">firewall-cmd --zone=public --permanent --add-rich-rule 'rule family=ipv4 source address=192.168.0.1/24 port port=22 protocol=tcp accept' #添加端口开放</span><br><span class="line">firewall-cmd --permanent --remove-rich-rule 'rule family=ipv4 source address=192.168.0.1/2 port port=5000 protocol=tcp accept' #删除端口开放</span><br></pre></td></tr></table></figure>
+
+<h3 id="iptables-services-防火墙-非必须-可以解决mysql无法远程连接问题"><a href="#iptables-services-防火墙-非必须-可以解决mysql无法远程连接问题" class="headerlink" title="iptables-services(防火墙,非必须-可以解决mysql无法远程连接问题)"></a>iptables-services(防火墙,非必须-可以解决mysql无法远程连接问题)</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">查询是否已安装</span></span><br><span class="line">rpm -qa|grep -i iptables</span><br><span class="line"><span class="meta">#</span><span class="bash">安装</span></span><br><span class="line">yum install iptables-services</span><br><span class="line"><span class="meta">#</span><span class="bash">启动防火墙</span></span><br><span class="line">systemctl enable iptables</span><br><span class="line">systemctl start iptables</span><br><span class="line"><span class="meta">#</span><span class="bash">查看状态</span></span><br><span class="line">service iptables status</span><br><span class="line"><span class="meta">#</span><span class="bash">打开&amp;关闭</span></span><br><span class="line">service iptables start </span><br><span class="line">service iptables stop</span><br><span class="line"><span class="meta">#</span><span class="bash">开放端口(3306端口距离)</span></span><br><span class="line">vim /etc/sysconfig/iptables</span><br><span class="line"><span class="meta">#</span><span class="bash">添加  -A INPUT -p tcp -m state --state NEW -m tcp --dport 3306 -j ACCEPT</span></span><br><span class="line"><span class="meta">#</span><span class="bash">重启防火墙</span></span><br><span class="line">systemctl restart iptables</span><br><span class="line"><span class="meta">#</span><span class="bash">设置为系统服务，开机自启动</span></span><br><span class="line">systemctl enable iptables.service</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置静态IP地址-防止总是自动修改"><a href="#配置静态IP地址-防止总是自动修改" class="headerlink" title="配置静态IP地址(防止总是自动修改)"></a>配置静态IP地址(防止总是自动修改)</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-enp0s3</span><br><span class="line"><span class="meta">#</span><span class="bash">----------------修改为以下配置---------------<span class="comment">#</span></span></span><br><span class="line">TYPE="Ethernet"</span><br><span class="line">BOOTPROTO="static" #静态方式</span><br><span class="line">NM_CONTROLLED="no" #不使用网络管理器</span><br><span class="line">DEFROUTE="yes"</span><br><span class="line">IPV4_FAILURE_FATAL="no"</span><br><span class="line">IPV6INIT="yes"</span><br><span class="line">IPV6_AUTOCONF="yes"</span><br><span class="line">IPV6_DEFROUTE="yes"</span><br><span class="line">IPV6_FAILURE_FATAL="no"</span><br><span class="line">IPV6_ADDR_GEN_MODE="stable-privacy"</span><br><span class="line">NAME="enp0s3"</span><br><span class="line">UUID="2b4bcec5-6c11-411b-b7b5-177d6b1075b2"</span><br><span class="line">DEVICE="enp0s3"</span><br><span class="line">ONBOOT="yes"</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">TYPE="Ethernet"</span><br><span class="line">PROXY_METHOD="none"</span><br><span class="line">BROWSER_ONLY="no"</span><br><span class="line">BOOTPROTO="dhcp"</span><br><span class="line">NM_CONTROLLED="no"</span><br><span class="line">DEFROUTE="yes"</span><br><span class="line">IPV4_FAILURE_FATAL="no"</span><br><span class="line">IPV6INIT="yes"</span><br><span class="line">IPV6_AUTOCONF="yes"</span><br><span class="line">IPV6_DEFROUTE="yes"</span><br><span class="line">IPV6_FAILURE_FATAL="no"</span><br><span class="line">IPV6_ADDR_GEN_MODE="stable-privacy"</span><br><span class="line">NAME="em1"</span><br><span class="line">UUID="a7e4500e-47f5-4df2-828b-205df54500f0"</span><br><span class="line">DEVICE="em1"</span><br><span class="line">ONBOOT="yes"</span><br><span class="line">HWADDR="e4:54:e8:c8:6c:31"</span><br><span class="line"><span class="meta">#</span><span class="bash">设置固定ip</span></span><br><span class="line">IPADDR=192.168.4.199 </span><br><span class="line"><span class="meta">#</span><span class="bash">子网掩码为物理机子网掩码(subnet mask)</span></span><br><span class="line">NETMASK=255.255.255.0 </span><br><span class="line"><span class="meta">#</span><span class="bash">设置网关为物理机网关(gateway)</span></span><br><span class="line">GATEWAY=192.168.4.1 </span><br><span class="line"><span class="meta">#</span><span class="bash">----------------配置完成！---------------<span class="comment">#</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash">重启网卡</span></span><br><span class="line">service network restart</span><br><span class="line"><span class="meta">#</span><span class="bash">----------------添加DNS服务器(非必须！)---------------<span class="comment">#</span></span></span><br><span class="line">vim /etc/resolv.conf</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装开发软件"><a href="#安装开发软件" class="headerlink" title="安装开发软件"></a>安装开发软件</h2><h3 id="安装mysql"><a href="#安装mysql" class="headerlink" title="安装mysql"></a>安装mysql</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">查询之前是否安装过MySQL</span></span><br><span class="line">rpm -qa|grep -i mysql</span><br><span class="line"><span class="meta">#</span><span class="bash">卸载旧版本MySQL</span></span><br><span class="line">rpm -e --nodeps  软件名称(上面查找出来的MySQL旧版本)</span><br><span class="line"><span class="meta">#</span><span class="bash">下载安装mysql wget 资源库</span></span><br><span class="line">wget -i -c http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm</span><br><span class="line"><span class="meta">#</span><span class="bash">下载安装mysql yum 资源库</span></span><br><span class="line">yum -y install mysql57-community-release-el7-10.noarch.rpm</span><br><span class="line"><span class="meta">#</span><span class="bash">安装mysql服务器</span></span><br><span class="line">yum -y install mysql-community-server</span><br><span class="line"><span class="meta">#</span><span class="bash">获取mysql创建的随机密码</span></span><br><span class="line">grep "password" /var/log/mysqld.log</span><br><span class="line"><span class="meta">#</span><span class="bash">添加可连接授权</span></span><br><span class="line">grant replication slave on *.* to 'root'@'%' identified by '123456';</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装Mycat"><a href="#安装Mycat" class="headerlink" title="安装Mycat"></a>安装Mycat</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">查询之前是否安装过MyCat</span></span><br><span class="line">rpm -qa|grep -i mysql</span><br><span class="line"><span class="meta">#</span><span class="bash">下载MyCat</span></span><br><span class="line">wget http://dl.mycat.io/1.6-RELEASE/Mycat-server-1.6-RELEASE-20161028204710-linux.tar.gz</span><br><span class="line">tar -zvxf Mycat-server-1.5.1-RELEASE-20160602230303-linux.tar.gz </span><br><span class="line"><span class="meta">#</span><span class="bash">配置环境变量(非必要)</span></span><br><span class="line">export MYCAT_HOME=/usr/local/mycat</span><br><span class="line">source /etc/profile</span><br><span class="line"><span class="meta">#</span><span class="bash">测试是否生效：</span></span><br><span class="line">echo $MYCAT_HOME</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装JavaJDK"><a href="#安装JavaJDK" class="headerlink" title="安装JavaJDK"></a>安装JavaJDK</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">yum install java java-1.8.0-openjdk-devel</span><br><span class="line"><span class="meta">#</span><span class="bash">环境变量</span></span><br><span class="line">whereis java </span><br><span class="line">ll /usr/lib/jvm</span><br><span class="line">vim /etc/profile</span><br><span class="line">export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.241-2.6.20.0.el7_7.x86_64</span><br><span class="line">export JRE_HOME=$&#123;JAVA_HOME&#125;</span><br><span class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;JRE_HOME&#125;/lib</span><br><span class="line">export PATH=$&#123;JAVA_HOME&#125;/bin:$PATH</span><br><span class="line">source /etc/profile</span><br><span class="line">java-version</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装Maven环境变量配置"><a href="#安装Maven环境变量配置" class="headerlink" title="安装Maven环境变量配置"></a>安装Maven环境变量配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">下载</span></span><br><span class="line">https://maven.apache.org/download.cgi</span><br><span class="line">wget https://www-eu.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz</span><br><span class="line">tar -zxf apache-maven-3.6.1-bin.tar.gz </span><br><span class="line"><span class="meta">#</span><span class="bash">环境变量</span></span><br><span class="line">vim /etc/profile</span><br><span class="line">vim ~/.bash_profile </span><br><span class="line">export MAVEN_HOME=/usr/java/dev_tools/apache-maven-3.6.3</span><br><span class="line">export PATH=$MAVEN_HOME/bin:$PATH</span><br><span class="line"><span class="meta">#</span><span class="bash">测试</span></span><br><span class="line">source /etc/profile</span><br><span class="line">mvn -version</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装git配置"><a href="#安装git配置" class="headerlink" title="安装git配置"></a>安装git配置</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">下载</span></span><br><span class="line">yum install git </span><br><span class="line"><span class="meta">#</span><span class="bash">配置git账号密码(非必须)</span></span><br><span class="line">git config --global user.name [username]</span><br><span class="line">git config --global user.password [userpassword]</span><br><span class="line">git config --global credential.helper store</span><br></pre></td></tr></table></figure>
+
+<h3 id="部署Jar项目脚本"><a href="#部署Jar项目脚本" class="headerlink" title="部署Jar项目脚本"></a>部署Jar项目脚本</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">! /bin/bash</span></span><br><span class="line">echo "测试环境[app]启动部署，使用pipeline分支"</span><br><span class="line">sleep 3s;</span><br><span class="line">cd /root/klks-cloud-source/klks-cloud-platform/</span><br><span class="line">git checkout dev</span><br><span class="line">git pull</span><br><span class="line">mvn clean install -Dmaven.test.skip=true</span><br><span class="line">cd  /usr/java/klks-cloud/</span><br><span class="line">PID=`ps -ef |grep "klks-app" |grep -v "grep" | awk '&#123;print $2&#125;'`</span><br><span class="line">echo $PID</span><br><span class="line">kill -9 $PID</span><br><span class="line">sleep 5s</span><br><span class="line">rm klks-app-1.0.0.jar -rf </span><br><span class="line">cp /root/klks-cloud-source/klks-cloud-platform/klks-app/target/klks-app-1.0.0.jar .</span><br><span class="line">nohup java -jar -Dspring.profiles.active=dev klks-app-1.0.0.jar &gt;&gt; app.log &amp; tail -f app.log</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/06/12/Centos7%20%E7%B3%BB%E7%BB%9F%E5%BF%AB%E9%80%9F%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91%E6%90%AD%E5%BB%BA/" data-id="ckatuoth30000yk014z4j6map" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/05/14/Docker-%E5%85%A5%E9%97%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Docker-入门</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/06/12/Centos7%20%E7%B3%BB%E7%BB%9F%E5%BF%AB%E9%80%9F%E7%8E%AF%E5%A2%83%E5%BC%80%E5%8F%91%E6%90%AD%E5%BB%BA/">Centos7 系统快速环境开发搭建</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/14/Docker-%E5%85%A5%E9%97%A8/">Docker-入门</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/05/SpringBoot-Mycat%EF%BC%88MySql%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%EF%BC%89/">SpringBoot-Mycat（MySql读写分离）</a>
+          </li>
+        
+          <li>
+            <a href="/2019/05/05/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E7%A6%85%E9%81%93Linux/">项目管理禅道Linux</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/04/MySql%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90(%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3%E5%AE%8C%E6%88%90%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%87%E5%BA%93,%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB)/">MySql多数据源(自定义注解完成数据库切库,读写分离)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Wanglei<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
