@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2019/08/27/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</loc>
+    
+    <lastmod>2020-06-04T05:15:57.690Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/tags/index.html</loc>
     
     <lastmod>2020-06-01T03:52:27.804Z</lastmod>
@@ -124,13 +131,6 @@
     <loc>http://yoursite.com/2018/05/01/Hello-SpringBoot/</loc>
     
     <lastmod>2020-05-31T15:07:16.272Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2019/08/27/Hexo%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</loc>
-    
-    <lastmod>2020-05-31T14:53:54.299Z</lastmod>
     
   </url>
   
